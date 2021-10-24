@@ -149,7 +149,13 @@ To run the service use the following command:
     ./main.py
     
 ## How to run the service on Docker container
-    ./main.py
+First we need to create the Docker container with the following command
+
+    docker image build -t docker-ims .
+    
+To run the service use the following command
+
+    docker run -p 5000:5000 docker-ims
 
 ## How to run the tests
 Due to the simplicity of IMS some integration tests have been developed. In order for the tests to be correctly executed the file `IMG_X.jpeg` must be in the same path of the test script.
