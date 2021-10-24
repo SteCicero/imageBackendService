@@ -8,11 +8,15 @@ from multiprocessing import Process
 
 app = Flask(__name__)
 api = Api(app)
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000     #16 MB max allowed payload for upload
+
+# configuration parameter
 STORAGE_PATH = "storage/"
 MAX_WIDTH = 2000
 MAX_HEIGHT = 2000
+SERVER_PORT = 5000
 
-
+# setting up requested parameter for resize request operation
 img_resize_args = reqparse.RequestParser()
 img_resize_args.add_argument("width", type=int, help="Width of the image is required", required=True)
 img_resize_args.add_argument("height", type=int, help="Height of the image is required", required=True)
@@ -20,11 +24,14 @@ img_resize_args.add_argument("height", type=int, help="Height of the image is re
 images = []
 
 def load_img_list():
+    # populate image list with files stored in the STORAGE_PATH
     for img in os.listdir(STORAGE_PATH):
-        images.append(img)
+        if not img.startswith("."): 
+            images.append(img)
     images.sort()
 
 def img_resize(filename, width, height):
+    # performs image resizing overwriting the original one
     image = PIL.Image.open(STORAGE_PATH + filename)
     resized_image = image.resize((width, height))
     resized_image.save(STORAGE_PATH + filename)
@@ -32,9 +39,11 @@ def img_resize(filename, width, height):
 
 class ImageList(Resource):
     def get(self):
+        #handle the request for file list
         return images
     
     def post(self):
+        #handle image uploading
         if "file" not in request.files:
             abort(400 , message="No file part in the request")
 
@@ -57,6 +66,7 @@ class ImageList(Resource):
 
 class Image(Resource):
     def get(self, img_name):
+        #handle image download
         filename = secure_filename(img_name)
         if filename not in images:
             abort(404, message="Could not find image...")
@@ -66,6 +76,7 @@ class Image(Resource):
         return send_from_directory(path, filename)
 
     def delete(self, img_name):
+        #handle image delete
         filename = secure_filename(img_name)
         if filename not in images:
             abort(404, message="Could not find image...")
@@ -74,8 +85,8 @@ class Image(Resource):
         images.sort()
         return "", 204
 
-
     def patch(self, img_name):
+        #handle image resizing
         filename = secure_filename(img_name)
         if filename not in images:
             abort(404, message="Could not find image")
@@ -88,13 +99,13 @@ class Image(Resource):
         p = Process(target=img_resize, args=(filename, args["width"], args["height"]))
         p.start()
 
-        return "Image successfully resized",202
+        return "Image resize command received",202
 
-
+# adding endpoints to the api
 api.add_resource(ImageList, "/")
 api.add_resource(Image, "/<string:img_name>")
 
 
 if __name__ == "__main__":
     load_img_list()
-    app.run(debug=True, port = 5000)
+    app.run(debug=True, port = SERVER_PORT)
