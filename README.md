@@ -133,7 +133,7 @@ The API implementation is distributed between 2 classes (one for each endpoint):
 
 The service to work properly needs to keep track of the images available on the server. In order to do so while avoiding the usage of any external data persistence, IMS at startup scans the path on wich images are managed and create a list that will be updated everytime an upload or delete operation is performed.
 
-Since the resizing of an image could be a time consuming operation, this task is performed asynchronously with respect of the request. This is a very simple solution to avoid keeping the client waiting for the operation to be performed. The issue is that the client does not receive any notification on when the operation will be completed. Improvements could be obtained by using architectural solution wich provide some callback mechanism and a queue to manage concurrent requests.
+Since the resizing of an image could be a time consuming operation, this task is performed asynchronously with respect of the request. This is a very simple solution to avoid keeping the client waiting for the operation to be performed. The issue is that the client does not receive any notification on when the operation will be completed. Improvements could be obtained by using architectural solution wich provide some callback mechanism and a queue to manage concurrent requests. The resizing operation is performed through the `Pillow library`.
 
 ## How to run the service
     ./main.py
