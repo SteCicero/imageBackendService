@@ -1,5 +1,5 @@
 # IMS - Image Backend Service
-IMS is a simple backend service that implements some basic operations on images through HTTP API. The main feature of this backend service are:
+IMS is a simple backend service that implements some basic operations on images through HTTP API. The main features of this backend service are:
  - image upload
  - image delete
  - image download
@@ -90,11 +90,11 @@ This function allows to resize an image given file name and width and height par
 
      < HTTP/1.0 202 ACCEPTED
      < Content-Type: application/json
-     < Content-Length: 29
+     < Content-Length: 32
      < Server: Werkzeug/2.0.2 Python/3.8.2
-     < Date: Sun, 24 Oct 2021 12:27:01 GMT
+     < Date: Sun, 24 Oct 2021 13:33:52 GMT
      < 
-     "Image successfully resized"
+     "Image resize command received"
      * Closing connection 0
 
 ## Get an image
