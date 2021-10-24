@@ -7,7 +7,10 @@ IMS is a simple backend service that implements some basic operations on images 
  - listing of the available images
 
 ## API endpoints
-The API endpoints
+IMS has 2 endpoints in order to offer his services
+    /
+    /img_name.jpg
+
 
 ## Architecture
 This service has been implemented using Flask framework in Python 3.8 language.
@@ -16,3 +19,4 @@ This service has been implemented using Flask framework in Python 3.8 language.
     ./main.py
 
 ## How to run the tests
+    ./test.py
