@@ -108,4 +108,4 @@ api.add_resource(Image, "/<string:img_name>")
 
 if __name__ == "__main__":
     load_img_list()
-    app.run(debug=True, port = SERVER_PORT)
+    app.run(debug=True, host = "0.0.0.0", port = SERVER_PORT)
