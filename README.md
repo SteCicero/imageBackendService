@@ -152,7 +152,7 @@ To run the service use the following command:
     ./main.py
 
 ## How to run the tests
-Due to the simplicity of IMS some integration tests have been developed.
+Due to the simplicity of IMS some integration tests have been developed. In order for the tests to be correctly executed the file `IMG_X.jpeg` must be in the same path of the test script.
 
 To run the tests use the following command:
     
