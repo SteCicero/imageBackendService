@@ -6,16 +6,19 @@ IMS is a simple backend service that implements some basic operations on images 
  - image resize with given width and height
  - listing of the available images
 
+This service does not require any user authentication.
+
 ## API endpoints
 IMS has 2 endpoints in order to offer his services
     
-    `/`
+    /
     
-    `/img_name.jpg`
+    /img_name.jpg
 
-where in the second one "img_name.jpg" is a parameter wich represent the file name of the image.
+where in the second one "img_name.jpg" is a parameter wich represent the file name of the image. This service runs on port 5000.
 
 ## Get list of images
+This function return an ordered list of the images available on the server. Images are stored inside the 'storage' folder in the same path of the Python script
 
 ### Request
 
@@ -39,6 +42,7 @@ where in the second one "img_name.jpg" is a parameter wich represent the file na
      * Closing connection 0
 
 ## Unpload an image
+This function allows the upload of an image. Checks about the correctness of the request and the size of the image are performed.
 
 ### Request
      
@@ -75,7 +79,7 @@ where in the second one "img_name.jpg" is a parameter wich represent the file na
      * Closing connection 0
 
 ## Resize an image
-
+This function allows to resize an image given file name and width and height parameters. When the service receive a request it spawns a process which perform the resize of the image asynchronously and overwrite the original one. Checks about the correctness of the request are performed.
 ### Request
 
 `PATCH /img_name.jpeg`
@@ -94,7 +98,7 @@ where in the second one "img_name.jpg" is a parameter wich represent the file na
      * Closing connection 0
 
 ## Get an image
-
+This function allows to download an image available on the server. This has been added in order to simplify the test activity.
 ### Request
 
 `GET /img_name.jpeg`
@@ -118,7 +122,18 @@ where in the second one "img_name.jpg" is a parameter wich represent the file na
 
 
 ## Architecture
-This service has been implemented using Flask framework in Python 3.8 language.
+IMS has been implemented using Flask framework in Python 3.8 language. The service is made of a single file Python script `main.py`. In the first part of the code some parameters of the service are defined such as the listening port and the on and the maximum upload file size
+Then 2 utility functions are defined:
+ - `load_img_list()` wich is called during service startup in order to scan the filesystem and generate the file list
+ - `img_resize()` wich performs the resize of an image
+
+The API implementation is distributed between 2 classes (one for each endpoint):
+ - `ImageList` wich implements image uploading and image listing
+ - `Image` wich implements download of an image, delete of an image and resize of an image
+
+The service to work properly needs to keep track of the images available on the server. In order to do so while avoiding the usage of any external data persistence, IMS at startup scans the path on wich images are managed and create a list that will be updated everytime an upload or delete operation is performed.
+
+Since the resizing of an image could be a time consuming operation, this task is performed asynchronously with respect of the request. This is a very simple solution to avoid keeping the client waiting for the operation to be performed. The issue is that the client does not receive any notification on when the operation will be completed. Improvements could be obtained by using architectural solution wich provide some callback mechanism and a queue to manage concurrent requests.
 
 ## How to run the service
     ./main.py
