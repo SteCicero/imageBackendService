@@ -15,7 +15,7 @@ IMS has 2 endpoints in order to offer his services
     
     /img_name.jpg
 
-where in the second one "img_name.jpg" is a parameter wich represent the file name of the image. This service runs on port 5000.
+where in the second one `img_name.jpg` is a parameter wich represent the file name of the image. This service runs on port 5000.
 
 ## Get list of images
 This function return an ordered list of the images available on the server. Images are stored inside the 'storage' folder in the same path of the Python script
@@ -133,10 +133,27 @@ The API implementation is distributed between 2 classes (one for each endpoint):
 
 The service to work properly needs to keep track of the images available on the server. In order to do so while avoiding the usage of any external data persistence, IMS at startup scans the path on wich images are managed and create a list that will be updated everytime an upload or delete operation is performed.
 
-Since the resizing of an image could be a time consuming operation, this task is performed asynchronously with respect of the request. This is a very simple solution to avoid keeping the client waiting for the operation to be performed. The issue is that the client does not receive any notification on when the operation will be completed. Improvements could be obtained by using architectural solution wich provide some callback mechanism and a queue to manage concurrent requests. The resizing operation is performed through the `Pillow` library.
+Since the resizing of an image could be a time consuming operation, this task is performed asynchronously with respect of the request. This is a very simple solution to avoid keeping the client waiting for the operation to be performed. The issue is that the client does not receive any notification on when the operation will be completed. Improvements could be obtained by using architectural solution wich provide some callback mechanism and a queue to manage concurrent requests. The resizing operation is performed through the `Pillow` library. The complete list of the libraries used in this project could be found in the `requirements.txt` file.
 
 ## How to run the service
+IMS require Python 3.8 interpreter. To install all the required libraries through PIP use the following command
+
+    pip3 install -r requirements.txt
+
+or
+
+    pip install -r requirements.txt
+    
+To run the service use the following command:
+
+    ./main.py
+    
+## How to run the service on Docker container
     ./main.py
 
 ## How to run the tests
+Due to the simplicity of IMS some integration tests have been developed.
+
+To run the tests use the following command:
+    
     ./test.py
