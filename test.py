@@ -67,9 +67,10 @@ input()
 print("Resizing an uploaded image at 256x256 px")
 response = requests.patch(BASE + "IMG_X.jpeg", {"width" : 256, "height": 256} )
 print(response.json())
+print("Downloading the resized image...")
 
 time.sleep(DELAY)
 
-print("Downloading the resized image")
 response = requests.get(BASE + "IMG_XD.jpeg")
 open("IMG_X_resized.jpeg", "wb").write(response.content)
+print("===== END =====")
